@@ -3,23 +3,30 @@ import { onMount } from "svelte";
 import anime from "animejs";
 
 
-export let nbCircles: number = 5;
+export let nbCircles: number = 7;
 export let title: string = "Projects";
 
 let refCircles: HTMLDivElement[] = Array(nbCircles);
+
+let duration = 1000;
 
 let animeFn = async (c: HTMLDivElement) => anime({
             targets: c,
             easing: "linear",
             translateX: anime.random(-10, 10),
             translateY: anime.random(-10, 10),
-            duration: 1000
+            duration
         })
         .finished
 
 onMount(async () => {
     for (let c of refCircles)
-        animeFn(c).then(() => animeFn(c))
+        animeFn(c)
+    setInterval(async () => {
+        for (let c of refCircles)
+            await animeFn(c)
+    }, duration)
+    
 });
 
 </script>
